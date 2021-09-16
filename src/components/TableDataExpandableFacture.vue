@@ -202,7 +202,7 @@ props:{'headers':{type:Array,required:true},
 data() {
         return { 
                 selectionItems:['chèque','espèce','virement','Carte credit'],
-                singleExpand:true,
+                singleExpand:true,search:"",
     }},
   computed: {
     ...mapGetters(['getCurrentHotel','getUser','getToken','getCurrentLogo']),

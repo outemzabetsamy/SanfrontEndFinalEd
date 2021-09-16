@@ -17,9 +17,6 @@
             <v-container fluid grid-list-sm>
             <v-layout row wrap>
               <v-flex md3 sm12>
-               
-
-
               </v-flex>
               <v-flex md6 sm12>
                 <v-container fluid grid-list-sm>

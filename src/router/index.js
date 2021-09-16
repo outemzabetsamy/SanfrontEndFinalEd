@@ -18,6 +18,8 @@ import ReservationFrontDeskForm from '../views/ReservationFrontDeskForm.vue'
 import Login from '../views/Login.vue'
 import Hotel from '../views/Hotel.vue'
 import ChannelManager from '../views/ChannelManager.vue'
+import Email from '../views/Email.vue'
+import TacheMenageres from '../views/TacheMenageres.vue'
 
 Vue.use(VueRouter)
 
@@ -86,6 +88,16 @@ const routes = [
     path: '/reservations/:id',
     name: 'Reservation',
     component: ReservationForm
+  },
+  {
+    path: '/tachemenageres',
+    name: 'TacheMenageres',
+    component: TacheMenageres
+  },
+  {
+    path: '/emails',
+    name: 'Email',
+    component: Email
   },
   {
     path: '/ressources',

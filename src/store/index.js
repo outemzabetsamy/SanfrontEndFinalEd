@@ -11,6 +11,7 @@ import frontdesk from './modules/frontdesk';
 import facture from './modules/facture';
 import login from './modules/login';
 import hotelRegistration from './modules/hotelRegistration';
+import email from './modules/email';
 Vue.use(Vuex)
 export default new Vuex.Store({
     modules:{
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         facture,
         login,
         hotelRegistration,
+        email,
 
 
     }

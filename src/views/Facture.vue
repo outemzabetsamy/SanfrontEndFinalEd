@@ -10,7 +10,7 @@
           <table-header-buttons
             :add="add"
             :reloadData="reloadData"
-            :updateSearchPanel="updateSearchPanel"
+            
           ></table-header-buttons>
         </v-card-title>
 	<tabledata :headers="headers" :items="getFactures"   @view="view"
@@ -131,7 +131,7 @@ export default {
         },
         view(item){
             console.log(item);
-            this.foo=true
+            
             //this.lastNumChambre(item.chambre.numChambre)
            // this.$router.push(`/reservations/${item.idReservation}`)
         },

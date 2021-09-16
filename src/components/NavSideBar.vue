@@ -106,6 +106,7 @@ import {mapGetters,mapActions} from 'vuex';
           { title: 'Utilisateurs', icon: 'mdi-account-group',path:'/utilisateurs' },
           { title: 'FrontDesk', icon: 'mdi-chart-gantt',path:'/frontdesk' },
           { title: 'Ressources', icon: 'mdi-room-service',path:'/ressources' },
+          { title: 'Housekeeping', icon: 'mdi-spray-bottle',path:'/tachemenageres' },
           { title: 'Facture', icon: 'mdi-file-document',path:'/factures' },
           { title: 'Channel manager', icon: 'fas fa-sitemap',path:'/channelmanager' },
           { title: 'Tresorerie', icon: 'mdi-cash-multiple',path:'/tresorerie' },
