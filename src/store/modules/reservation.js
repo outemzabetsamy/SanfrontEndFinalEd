@@ -9,7 +9,7 @@ const state={
     datefin:'',etatReservation:'',montantSejour:'',client:{nomClient:'',
     prenomClient:'',typeClient:'',civiliteClient:'',
     ageClient:'',numIDNational:'',adresseClient:'',
-    numTelClient:''},chambre:{id:'',numChambre:'',
+    numTelClient:'',emailCLient:''},chambre:{id:'',numChambre:'',
     numEtage:'',etatChambre:'',
     typeChambre:{id:'',nomType:'',
     nbMaxPers:'',prixAdulte:'',prixEnfant:''}},idHotel:'',username:''},
@@ -32,6 +32,7 @@ const state={
     isRoomChanged:false,
     arrivalsOfTheDay:[],
     departuresOfTheDay:[],
+    
 
     
 }
@@ -44,6 +45,9 @@ const getters={
     getIsRoomChanged:(state)=>state.isRoomChanged,
     getDepartures:(state)=>state.departuresOfTheDay,
     getArrivals:(state)=>state.arrivalsOfTheDay,
+    getEmailClient:(state)=>state.reservation.client.emailCLient,
+    getConfirmationEmail:(state)=>state.confirmationEmail,
+    getChambreForEmail:(state)=>state.reservation.chambre.numChambre,
 }
 
 const actions={
@@ -89,18 +93,16 @@ const actions={
         console.log("ar.reservationToPost")
         console.log(ar.reservationToPost)
         await axios.post('https://sanhotelreservation.herokuapp.com/api/reservation/add',ar.reservationToPost
-        ,{headers:{Authorization:ar.token}})
-        .then(res=>{console.log(res.data);
-            
-           
+        ,{headers:{Authorization:ar.token}}).then(res=>{
+            console.log(res.data);
             bus.$emit('successAdd',{bool:true,color:'success',notice:"New reservation has been added."})
+            bus.$emit('setConfirmationEmail',true)
             commit('newReservation',res.data);
-        })
-        .catch(err=>{
+        }).catch(err=>{
             console.log(err);
             console.log("erreur ajout")
             bus.$emit('errorAdd',{bool:true,color:'error',notice:"Failed to add new reservation."})
-        })
+        });
         
         
     },
@@ -190,7 +192,9 @@ const actions={
     async setOneRes({commit},res){
     commit('setOneReservation',res);
     },
-    
+    emailConfirmation({commit},bool){
+        commit("setEmailConfirmation",bool);
+    }
 }
 
 const mutations={
@@ -208,6 +212,7 @@ const mutations={
     setDepartures:(state,departures)=>(state.departuresOfTheDay=departures),
     setDateDeb:(state,d)=>(state.reservationToPost.dateDebut=d),
     setDateFin:(state,d)=>(state.reservationToPost.datefin=d),
+    setEmailConfirmation:(state,bool)=>(state.confirmationEmail=bool),
 
 
 };

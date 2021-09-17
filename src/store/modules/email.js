@@ -129,7 +129,8 @@ const actions={
         commit('setUserName',ar.username);
     },
     async sendReservationEmail({commit},ar){
-        await (await axios.post("https://sanhotelsemails.herokuapp.com/api/mail/add",ar.emailTemplate ,{headers:{Authorization:ar.token}}))
+        
+        await axios.post("https://sanhotelsemails.herokuapp.com/api/mail/sendingEmail",ar.emailTemplate ,{headers:{Authorization:ar.token}})
         .then(res=>{
             console.log(res)
             bus.$emit('successDelete',{bool:true,color:'success',notice:"Email sent with success."})
@@ -138,7 +139,26 @@ const actions={
             bus.$emit('errorDelete',{bool:true,color:'error',notice:"Operation failed! Please try again later."})
             console.log(err);
         })
-    }
+    },
+    /**************************************EMAILTEMPLATE************************** */
+async setTheReservationOfTheEmailTemplate({commit},res){
+commit('setReservationEmailTemp',res);
+},
+async setTheToOfTheEmailTemplate({commit},res){
+    commit('setToEmailTemplate',res);
+    },
+async setTheHotelOfTheEmailTemplate({commit},res){
+        commit('setHotelEmailTemplate',res);
+        },
+async setTheEmailInfoOfTheEmailTemplate({commit},res){
+            commit('setHotelEmailTemplate',res);
+            },
+async setTheModelName({commit},res){
+    commit('setModelName',res)
+},
+async setChambre({commit},ch){
+commit('setChambreEmail',ch)
+},
 }
 const mutations={
     setEmails:(state,emails)=>(state.emails=emails),
@@ -149,6 +169,15 @@ const mutations={
     setIdHotel:(state,idhotel)=>(state.email.idHotel=idhotel),
     setUserName:(state,username)=>(state.email.username=username),
     setMailResponse:(state,r)=>(state.mailResponse=r),
+    /********************************* */
+    setReservationEmailTemp:(state,res)=>(state.oneEmailTemplate.reservation=res),
+    setToEmailTemplate:(state,to)=>(state.oneEmailTemplate.toEmailForTemplate=to),
+    setHotelEmailTemplate:(state,h)=>(state.oneEmailTemplate.hotel=h),
+    setEmailInfoTemplate:(state,i)=>(state.oneEmailTemplate.emailInfo=i),
+    setModelName:(state,mn)=>(state.oneEmailTemplate.emailInfo.modelName=mn),
+    setChambreEmail:(state,ch)=>(state.oneEmailTemplate.reservation.chambre=ch)
+
+    
     
     
 }

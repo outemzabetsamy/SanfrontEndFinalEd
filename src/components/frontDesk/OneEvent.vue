@@ -24,6 +24,7 @@
         @drag:end="eHandler"
         v-on="on">
     <div :class="`event ${reservation.etatReservation}`" :res="res" :reservation="reservation" :ind="ind" v-on:mousedown="mouseDownEvent(res,ind,$event)" @mouseup="mouseUpEvent" @click="getEvent(res,ind,reservation,$event)">
+      <strong>{{reservation.client.nomClient}}</strong>
       </div>
     </VueResizable>
      </template>
@@ -199,10 +200,11 @@ export default {
 --y:0;
   }
 .event {
-  
+    color: white;
     position: absolute;
     width: 100%;
     height: 100%;
+    text-align: center;
     /*background-color: red;*/
     /*top:var(--y);
     left: var(--x);*/

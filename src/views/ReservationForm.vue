@@ -152,7 +152,7 @@
                   name="emailClient"
                   label="Email"
                   class="input-group--focused"
-                  
+                   v-model="oneReservation.client.emailCLient"
                 ></v-text-field>
               </v-flex>
               
@@ -189,18 +189,47 @@
       {{ notice }}
       <v-btn dark text @click.native="closeSnackbar">Close</v-btn>
     </v-snackbar>
-    
-    
+   <v-dialog
+      :dialog="emailbool"
+      :dialogTitle="dialogTitle"
+      :dialogText="dialogText"
+      @onConfirm="onConfirm"
+      @onCancel="onCancel"
+    ></v-dialog>
+    <v-card>
+      <v-card-title class="text-wrap">{{ dialogTitle }}</v-card-title>
+      <v-card-text>{{ dialogText }}</v-card-text>
+      <v-card-actions>
+        <v-btn
+          class="green--text darken-1"
+          text="text"
+          @click="onConfirm"
+          >Confirm</v-btn
+        >
+        <v-btn
+          class="orange--text darken-1"
+          text="text"
+          @click="onCancel"
+          >Cancel</v-btn
+        >
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 <script>
 import {mapActions,mapGetters} from 'vuex'
 import {bus} from '../main'
+
 export default {
-  
+  components:{
+    
+  },
     data() {
         return {
          dialog:false,
+         emailbool:false,
+         dialogTitle:'Reservation confirm dialog',
+          dialogText:'Do you want to send an email confirmation to the client ?',
          itemsCivilite:['Monsieur','Madame'],
          typeResItems:['All inclusive','Demi-pension','Pension complète'],
          typeClientItems:['Clientele d affaires','Clientele loisir','Baby boomers','VIP','Generation Z','Millienals'],
@@ -209,7 +238,7 @@ export default {
            bool:false,color:'',notice:'', 
         }
     },
-    computed:{ ...mapGetters(['oneReservation','allChambres','allTypeChambres','allnomTypeChambres','getNumChambres','getDialogLoader','getReservationToPost','getLastNumChambre','getUser','getToken']),
+    computed:{ ...mapGetters(['oneReservation','allChambres','getConfirmationEmail','allTypeChambres','allnomTypeChambres','getNumChambres','getDialogLoader','getReservationToPost','getLastNumChambre','getCurrentHotel','getEmail','getEmailTemplate','getEmailClient','getUser','getToken']),
     getDateFin:{
 
     }
@@ -257,6 +286,10 @@ export default {
             console.log("ikechmed ar emit ayini n error edit")
             this.setSnackbar(e);
         });
+        bus.$on('setConfirmationEmail',e=>{
+            console.log("ikechmed ar emit ayini n email confirmation" +e)
+            this.emailbool=true;
+        });
      }
     },
     mounted(){
@@ -271,10 +304,14 @@ export default {
     },
     methods:{
       ...mapActions(['addReservation','getReservationById','setDateDebut','setDatefin','resetReservation',
-      'fetchAllTypeChambres','getChambreByType','buildReservationToPost','roomChanged','editReservation','whoAMI','setReservationUserInfo']),
+      'fetchAllTypeChambres','getChambreByType','buildReservationToPost','roomChanged','editReservation','whoAMI','setReservationUserInfo',
+      'setTheReservationOfTheEmailTemplate','setChambre','getChambreForEmail','emailConfirmation','setTheToOfTheEmailTemplate','setTheHotelOfTheEmailTemplate','setTheEmailInfoOfTheEmailTemplate','setTheModelName','sendReservationEmail']),
         cancel(){
             this.$router.push({name:'Reservations'});
              this.resetReservation();
+        },
+        setConfirmation(bool){
+          this.confirmationEmail=bool;
         },
         getChambreWithType(item){
           let ar={type:item,idhotel:this.getUser.hotelCode,token:this.getToken}
@@ -303,7 +340,7 @@ export default {
            console.log(this.getReservationToPost);
           
             let ar4={reservationToPost:this.getReservationToPost,token:this.getToken}
-           this.addReservation(ar4);}
+           this.addReservation(ar4)}
 
        },
     parseDate(d){
@@ -321,6 +358,25 @@ export default {
         },
         closeSnackbar(){
             this.bool= !this.bool;
+        },
+        onConfirm(){
+            //let ar={id:this.itemId,idhotel:this.getUser.hotelCode,token:this.getToken}
+            //this.deleteReservation(ar);
+            this.setTheToOfTheEmailTemplate(this.getEmailClient);
+             this.setTheReservationOfTheEmailTemplate(this.oneReservation);
+             console.log("this.oneReservation.chambre.numChambre "+this.getChambreForEmail);
+             this.setChambre(this.getChambreForEmail)
+             this.setTheModelName("confirmreservation");
+             this.setTheEmailInfoOfTheEmailTemplate(this.getEmail);
+             this.setTheHotelOfTheEmailTemplate(this.getCurrentHotel);
+              let aremail={emailTemplate:this.getEmailTemplate,token:this.getToken};
+              console.log(aremail);
+             this.sendReservationEmail(aremail);
+            this.emailbool=false;
+        },
+        onCancel(){
+            this.emailbool=false
+            
         },     
     }
 }
